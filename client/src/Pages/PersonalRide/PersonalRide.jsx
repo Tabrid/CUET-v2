@@ -18,7 +18,7 @@ function PersonalRide() {
   }, [])
 
 
-  const [source, setSource] = useState('CUET Main Gate')
+  const [source, setSource] = useState('')
   const [sourceChange, setSourceChange] = useState(false)
   const [riderData, setRiderData] = useState(null);
   const [destinationChange, setDestinationChange] = useState(false)
@@ -26,10 +26,7 @@ function PersonalRide() {
   const [destination, setDistination] = useState('');
   const [rider, setRider] = useState(null);
   const [fare , setFare ] = useState(null);
-  const [sourceCoordinates, setSourceCoordinates] = useState({
-    lat: 22.46018927786971,
-    lng: 91.97106489520495
-  });
+  const [sourceCoordinates, setSourceCoordinates] = useState({});
   const [destinationCoordinates, setDestinationCoordinates] = useState({});
   const [directionData, setDirectionData] = useState(null);
   useEffect(() => {
@@ -66,6 +63,23 @@ function PersonalRide() {
   }
 
 
+  const onSourseAddressClick = async (item) => {
+    setSource(item.location_name);
+    setAddressList([]);
+    setSourceChange(false);
+    try {
+      setSourceCoordinates({
+        lat: item.latitude,
+        lng: item.longitude
+        ,
+        // lng: result.features[0].geometry.coordinates[0],
+        // lat: result.features[0].geometry.coordinates[1],
+      });
+      
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   const onDestinationAddressClick = async (item) => {
     setDistination(item.location_name);
     setAddressList([]);
@@ -106,7 +120,7 @@ function PersonalRide() {
   }, [destinationCoordinates]);
 
   const getDirectionRoute = async () => {
-
+    console.log(sourceCoordinates, destinationCoordinates);
     try {
       const res = await fetch(
         `${MAPBOX_DRIVING_ENDPOINT}${sourceCoordinates.lng},${sourceCoordinates.lat};${destinationCoordinates.lng},${destinationCoordinates.lat}?overview=full&geometries=geojson&access_token=${mapboxAccessToken}`,
@@ -122,13 +136,13 @@ function PersonalRide() {
       console.log(result?.routes[0]?.geometry?.coordinates);
       setDirectionData(result);
       const distance = result?.routes[0]?.distance;
-      if (distance<300) {
+      if (distance<700) {
         setFare(10)
       }
-      else if (distance < 600) {
+      else if (distance < 1000) {
         setFare(20)
       }
-      else if (distance < 900) {
+      else if (distance < 1500) {
         setFare(30)
       }
       else{
@@ -260,8 +274,18 @@ function PersonalRide() {
                     setSourceChange(true);
                     setDestinationChange(false)
                   }}
-                  disabled
                 />
+
+                {addressList && sourceChange ?
+                  <div className='shadow-md p-1 rounded-md
+            absolute w-full bg-white z-20'>
+                    {addressList?.map((item, index) => (
+                      <h2 key={index} className='p-3 hover:bg-gray-100
+                cursor-pointer'
+                        onClick={() => { onSourseAddressClick(item) }}
+                      >{item.location_name} </h2>
+                    ))}
+                  </div> : null}
               </div>
               <div className='relative'>
                 <label className='text-gray-400 text-[13px]'>Where To?</label>
@@ -288,8 +312,11 @@ function PersonalRide() {
 
               </div>
             </div>
-            <div className='flex justify-center items-center'>
-              <div className='grid grid-cols-3 gap-10'>
+            
+            
+            <div className=''>
+              {
+                riderData?.length > 0 ? <div className='grid grid-cols-3 gap-10'>
                 {riderData?.map((item, index) => (
                   <div
                     key={index}
@@ -299,10 +326,14 @@ function PersonalRide() {
                     className={`btn w-24 h-36 p-3 border-[1px] border-gray-200 my-2 rounded-md ${selectedItem === item._id ? 'bg-blue-500 hover:bg-blue-500 text-white' : ''
                       }`}
                   >
-                    <img src='https://i.ibb.co/b1vHnHL/image.png' className='w-20 h-20' />
+                    <img src={item.image} className='w-20 h-20' />
+                    
                   </div>
                 ))}
-              </div>
+              </div> : <div> no vehicale is available </div>
+              }
+
+             
 
             </div>
             <button className='btn w-full mt-5' onClick={Payment}>Confirm Now</button>

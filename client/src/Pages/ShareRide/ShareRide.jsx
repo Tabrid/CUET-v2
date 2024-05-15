@@ -19,17 +19,6 @@ function ShareRide() {
     })
   }, [])
 
-  useEffect(() => {
-    fetch("/api/users/riders")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setRiderData(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
 
   const [source, setSource] = useState('')
   const [sourceChange, setSourceChange] = useState(false)
@@ -62,6 +51,15 @@ function ShareRide() {
   };
   const handleRouteClick = (index) => {
     setSelectedRoute(index);
+    fetch(`/api/users/rider/${index}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setRiderData(data.users);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -307,7 +305,7 @@ function ShareRide() {
             }
             {
               fare&& selectedSeats ? <div className='text-center absolute'>
-                <h2 className='text-2xl font-bold'>fare:{fare * selectedSeats.length}tk</h2>
+                <h2 className='text-2xl font-bold'>FARE: {fare * selectedSeats.length}TK</h2>
                 
               </div> : null
             }
@@ -367,20 +365,20 @@ function ShareRide() {
             </div>
             <div className='flex gap-3 my-5'>
               <div
-                className={`p-3 cursor-pointer border border-black rounded-md ${selectedRoute === 1 ? 'bg-blue-500' : ''}`}
-                onClick={() => handleRouteClick(1)}
+                className={`p-3 cursor-pointer border border-black rounded-md ${selectedRoute === "route1" ? 'bg-blue-500' : ''}`}
+                onClick={() => handleRouteClick("route1")}
               >
                 Routes 1
               </div>
               <div
-                className={`p-3 cursor-pointer border border-black rounded-md ${selectedRoute === 2 ? 'bg-blue-500' : ''}`}
-                onClick={() => handleRouteClick(2)}
+                className={`p-3 cursor-pointer border border-black rounded-md ${selectedRoute === "route2" ? 'bg-blue-500' : ''}`}
+                onClick={() => handleRouteClick("route2")}
               >
                 Routes 2
               </div>
               <div
-                className={`p-3 cursor-pointer border border-black rounded-md ${selectedRoute === 3 ? 'bg-blue-500' : ''}`}
-                onClick={() => handleRouteClick(3)}
+                className={`p-3 cursor-pointer border border-black rounded-md ${selectedRoute === "route3" ? 'bg-blue-500' : ''}`}
+                onClick={() => handleRouteClick("route3")}
               >
                 Routes 3
               </div>
@@ -402,7 +400,8 @@ function ShareRide() {
               </div>
             </div>
             <div className=''>
-              <div className='grid grid-cols-3 gap-10'>
+              {
+                riderData?.length > 0 ? <div className='flex justify-center'><div className='grid grid-cols-3 gap-10'>
                 {riderData?.map((item, index) => (
                   <div
                     key={index}
@@ -412,11 +411,12 @@ function ShareRide() {
                     className={`btn w-24 h-36 p-3 border-[1px] border-gray-200 my-2 rounded-md ${selectedItem === item._id ? 'bg-blue-500 hover:bg-blue-500 text-white' : ''
                       }`}
                   >
-                    <img src='https://i.ibb.co/b1vHnHL/image.png' className='w-20 h-20' />
-                    
+                    <img src={item.image} className='w-20 h-20' />
+                    <h1>CLICK FOR SEAT</h1>
                   </div>
                 ))}
-              </div>
+              </div></div> : <div> no vehicale is available </div>
+              }
 
               {
                 showSit && availableSit ? (
@@ -453,7 +453,7 @@ function ShareRide() {
               }
 
             </div>
-            <button className='btn w-full mt-5' onClick={Payment}>Confirm Now</button>
+            <button className='btn w-full mt-5 bg-green-300 hover:bg-green-300' onClick={Payment}>Confirm Now</button>
           </div>
         </div>
       </div>

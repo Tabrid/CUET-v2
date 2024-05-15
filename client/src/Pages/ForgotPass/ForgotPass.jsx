@@ -1,10 +1,11 @@
 import { useState } from "react";
-
+import HashLoader from "react-spinners/HashLoader";
 const ForgotPass = () => {
     const [username, setusername] = useState('');
     const [submitted, setSubmitted] = useState(false);
-
+    const [loading ,setLoading] = useState(false);
     const handleSubmit = (e) => {
+        setLoading(true);
         e.preventDefault();
         fetch('/api/auth/forgot-password', {
             method: 'POST',
@@ -19,6 +20,7 @@ const ForgotPass = () => {
         })
         .then((data) => {
             console.log(data);
+            setLoading(false);
             setSubmitted(true);
         })
         .catch((error) => {
@@ -28,7 +30,8 @@ const ForgotPass = () => {
     };
     return (
         <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-            <div className="max-w-md w-full bg-white p-8 rounded shadow-md">
+            {
+                loading ? <HashLoader color="#000000" /> : <div className="max-w-md w-full bg-white p-8 rounded shadow-md">
                 <h2 className="text-2xl font-semibold mb-4">Forgot Password</h2>
                 {submitted ? (
                     <p className="text-green-500 mb-4">Password reset instructions sent to your username.</p>
@@ -55,6 +58,7 @@ const ForgotPass = () => {
                     </form>
                 )}
             </div>
+            }
         </div>
     );
 };

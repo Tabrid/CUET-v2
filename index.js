@@ -73,31 +73,29 @@ import locations6 from "./server/Data/routes3reverse.json" assert { type: "json"
 
 
 app.post('/api/findRoute', async (req, res) => {
-  
-  const { point1, point2,routes,map } = req.body;
+
+  const { point1, point2, routes, map } = req.body;
   console.log(req.body);
-  let locations =[];
-  if (routes==1) {
-    if (map=="forward") {
-      locations = location; 
-    } else if (map=="back"){
-      locations = locations2
-    } 
+  let locations = [];
+
+if (map === "forward") {
+  if (routes === "route1") {
+    locations = location;
+  } else if (routes === "route2") {
+    locations = locations3;
+  } else if (routes === "route3") {
+    locations = locations5;
   }
-  else if (routes==2) {
-    if (map=="forward") {
-      locations = locations3; 
-    } else if (map=="back"){
-      locations = locations4
-    } 
+} else if (map === "back") {
+  if (routes === "route1") {
+    locations = locations2;
+  } else if (routes === "route2") {
+    locations = locations4;
+  } else if (routes === "route3") {
+    locations = locations6;
   }
-  else if (routes==2) {
-    if (map=="forward") {
-      locations = locations5; 
-    } else if (map=="back"){
-      locations = locations6
-    } 
-  }
+}
+
   // Find details of two selected points
   const point1Details = locations.findIndex(point => point.location_name.toLowerCase() === point1.toLowerCase());
   const point2Details = locations.findIndex(point => point.location_name.toLowerCase() === point2.toLowerCase());
@@ -106,30 +104,30 @@ app.post('/api/findRoute', async (req, res) => {
   if (point1Details === -1 || point2Details === -1) {
     console.log({ error: 'One or both points not found' });
     return res.status(404).json({ error: 'One or both points not found' });
-    
-}
+
+  }
 
 
-  const pointsBetween = locations.slice(point1Details , point2Details +1);
+  const pointsBetween = locations.slice(point1Details, point2Details + 1);
   console.log(pointsBetween);
-  const routeCoordinates =await getDirectionRoute(pointsBetween);
-  let fair =0;
-  if (pointsBetween.length <4) {
-    fair=5
-  } 
-  else if(pointsBetween.length < 6) {
+  const routeCoordinates = await getDirectionRoute(pointsBetween);
+  let fair = 0;
+  if (pointsBetween.length < 4) {
+    fair = 5
+  }
+  else if (pointsBetween.length < 6) {
     fair = 10
   }
-  else if(pointsBetween.length <9){
+  else if (pointsBetween.length < 9) {
     fair = 15
   }
-  else{
+  else {
     fair = 20
   }
   res.json({
     points: pointsBetween,
-    coordinates:routeCoordinates,
-    fair:fair
+    coordinates: routeCoordinates,
+    fair: fair
   });
 });
 

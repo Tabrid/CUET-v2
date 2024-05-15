@@ -158,6 +158,15 @@ const StartRide = () => {
                 console.error('Error:', error);
             });
     };
+    function metersToKilometers(meters) {
+        return (meters / 1000).toFixed(3);
+    }
+    function calculateTimeInMinutes(meters) {
+        const speedPerSecond = 7; // 10 km/h
+        let timeInSeconds = meters / speedPerSecond;
+        let timeInMinutes = timeInSeconds / 60;
+        return timeInMinutes.toFixed(2); // Rounding to 2 decimal places
+    }
     return (
         <div>
             {
@@ -295,16 +304,16 @@ const StartRide = () => {
                             <div className="w-1/2">
                                 <h1 className="text-5xl font-bold">{data.startLocationName} To {data.endLocationName}</h1>
                                 {
-                                    data.type == 'share' ? <h1 className="text-5xl font-bold">Fare:{data.fare * data.selectedSeats.length}tk</h1> : <h1 className="text-5xl font-bold">Fare:{data.fare}tk</h1>
+                                    data.type == 'share' ? <h1 className="text-5xl font-bold">Fare:{data.fare * data.selectedSeats.length}TK</h1> : <h1 className="text-5xl font-bold">Fare:{data.fare}tk</h1>
                                 }
                                 {
                                     directionData?.routes ? <div className='my-3 '>
-                                        <h2 className='text-2xl font-bold'>Distance: {directionData?.routes[0]?.distance} meters</h2>
-                                        <h2 className='text-2xl font-bold'>Duration: {directionData?.routes[0]?.duration} seconds</h2>
+                                        <h2 className='text-2xl font-bold'>Distance: {metersToKilometers(directionData?.routes[0]?.distance)} KM</h2>
+                                        <h2 className='text-2xl font-bold'>Duration: {calculateTimeInMinutes(directionData?.routes[0]?.distance)} minutes</h2>
                                     </div> : null
                                 }
                                 {
-                                    data?.start == "pending" ? <h1 className="text-2xl font-bold">Waiting for rider to start</h1> : null
+                                    data?.start == "pending" ? <h1 className="text-2xl font-bold text-red-600">Waiting for rider to start</h1> : null
                                 }
                                 {
                                     authUser.role == 'Rider' ? <div>

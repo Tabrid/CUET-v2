@@ -1,6 +1,13 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-
+import nodemailer from "nodemailer";
+const transporter = nodemailer.createTransport({
+  service: "gmail", 
+  auth: {
+    user: "sawravdas01@gmail.com",
+    pass: "diofoensyszumjgj",
+  },
+});
 export const getUsersForSidebar = async (req, res) => {
 	try {
 		const loggedInUserId = req.user._id;
@@ -231,7 +238,7 @@ export const getAvailableSitById = async (req, res) => {
     try {
       const users = await User.find({ role }).select("-password");
       if (!users || users.length === 0) {
-        return res.status(404).json({ message: "Users not found for this role" });
+      res.status(404).json({ message: "Users not found for this role" });
       }
       res.status(200).json(users);
     } catch (error) {
@@ -252,4 +259,51 @@ export const getAvailableSitById = async (req, res) => {
     }
   };
   
+  export const updateUserVarified = async ( req , res) => {
+    const userId = req.params.id;
+    const {  route } = req.body;
+    try {
+      // Find the user by userId
+      const user = await User.findById(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "Users not found" });
+      }
+      
+      // Update varified field
+      user.varified = true;
+      
+      // If varified is true, update routes
+      if ( route) {
+        user.routes = route;
+      }
+     
+      // Save the updated user document
+      await user.save();
+
+      await transporter.sendMail({
+        from: "sawravdas01@gmail.com",
+        to: `${user.email}`,
+        subject: 'Account Approved',
+        text: `Your account has been approved successfully.\n\n Your Routes is  ${user.routes} `,
+      });
+      res.status(200).json({ success: true, message: "User varified successfully" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  export const getUsersByRoutes = async (req, res) => {
+    try {
+      // Extract routes from request parameters
+      const { routes } = req.params;
+  
+      // Find users whose routes match the provided routes
+      const users = await User.find({ routes: routes });
+  
+      res.status(200).json({ success: true, users: users });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  };
 

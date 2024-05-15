@@ -87,6 +87,7 @@ const userSchema = new mongoose.Schema(
     },
     routes:{
       type: String,
+      default: "",
     },
   },
   { timestamps: true }
