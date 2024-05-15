@@ -15,6 +15,7 @@ const MyProfile = () => {
                 return response.json();
             })
             .then((data) => {
+                console.log(data.user);
                 setUser(data.user);
                 setBalance(data.user.balance);
             })

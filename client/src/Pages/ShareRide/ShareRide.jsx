@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import Map, { Layer, Marker, Source } from 'react-map-gl';
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import toast from 'react-hot-toast';
 function ShareRide() {
   const [riderData, setRiderData] = useState(null);
   const [selected, setSelected] = useState(null);
@@ -141,17 +140,17 @@ function ShareRide() {
     
   }, [destinationCoordinates]);
 
-  const getDirectionRoute = async () => {
+  const getDirectionRoute = async (name) => {
     const formData = {
       point1: source,
       point2: destination,
       routes: selectedRoute,
-      map:selected
+      map:name
 
     }
     console.log(formData);
     try {
-      const response = await fetch('https://cuet-v2-1.onrender.com/api/findRoute', {
+      const response = await fetch('http://localhost:5000/api/findRoute', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -390,20 +389,17 @@ function ShareRide() {
               <div
                 className={`p-3 w-1/2 text-center border border-black rounded-md ${selected === 'forward' ? 'bg-blue-500' : ''
                   }`}
-                onClick={() => {setSelected('forward') }}
+                onClick={() => {setSelected('forward') , getDirectionRoute('forward')}}
               >
                 Forward
               </div>
               <div
                 className={`p-3 w-1/2 text-center border border-black rounded-md ${selected === 'back' ? 'bg-blue-500' : ''
                   }`}
-                onClick={() => {setSelected('back')}}
+                onClick={() => {setSelected('back') , getDirectionRoute('back')}}
               >
                 Back
               </div>
-            </div>
-            <div className='w-full p-3 border border-black rounded-md text-center mt-3 cursor-pointer' onClick={getDirectionRoute}>
-              Get Direction
             </div>
             <div className=''>
               <div className='grid grid-cols-3 gap-10'>

@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import useSignup from "../../Hooks/useSignup";
 import { useAuthContext } from "../../Context/AuthContext";
+import { useState } from "react";
 const Signup = () => {
     const { location } = useAuthContext();
     const { signup } = useSignup();
+    const [showPassword, setShowPassword] = useState(false);
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
@@ -50,6 +52,9 @@ const Signup = () => {
         form.reset();
     };
     
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     return (
         <div className="hero min-h-screen bg-base-200">
@@ -99,14 +104,14 @@ const Signup = () => {
                                     required
                                 />
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     name="password"
                                     placeholder="Type Password"
                                     className="input mt-5 input-bordered w-full max-w-xs"
                                     required
                                 />
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     name="confirmPassword"
                                     placeholder="Confirm Password"
                                     className="input mt-5 input-bordered w-full max-w-xs"

@@ -80,7 +80,14 @@ const userSchema = new mongoose.Schema(
     totalIncome:{
       type:Number,
       default:0
-    }
+    },
+    varified:{
+      type:Boolean,
+      default:false
+    },
+    routes:{
+      type: String,
+    },
   },
   { timestamps: true }
 );

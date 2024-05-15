@@ -108,6 +108,10 @@ export const signup = async (req, res) => {
     // HASH PASSWORD HERE
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    let varified = false;
+    if (role === "User") {
+      varified = true;
+    }
 
     const newUser = new User({
       fullName,
@@ -117,7 +121,8 @@ export const signup = async (req, res) => {
       image,
       location,
       email,
-      phone
+      phone,
+      varified
     });
 
     if (newUser) {
@@ -131,6 +136,7 @@ export const signup = async (req, res) => {
         username: newUser.username,
         image: newUser.image,
         role: newUser.role,
+        varified: newUser.varified,
       });
     } else {
       res.status(400).json({ error: "Invalid user data" });
