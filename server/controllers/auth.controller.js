@@ -3,10 +3,10 @@ import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
-  service: "gmail", // Change to your email service provider
+  service: "gmail", 
   auth: {
-    user: "sawravdas01@gmail.com", // Replace with your email
-    pass: "diofoensyszumjgj", // Replace with your email password
+    user: "sawravdas01@gmail.com",
+    pass: "diofoensyszumjgj",
   },
 });
 
@@ -14,24 +14,19 @@ export const forgotPass = async (req, res) => {
   const { username } = req.body;
 
   try {
-    // Find user by 			username,
-
     const user = await User.findOne({ username });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Generate a random password reset token
     const resetToken = Math.random().toString(36);
 
-    // Update user's resetPasswordToken and resetPasswordExpires fields
     user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    user.resetPasswordExpires = Date.now() + 3600000; 
 
     await user.save();
 
-    // Send password reset email
     await transporter.sendMail({
       from: "sawravdas01@gmail.com",
       to: `${user.email}`,
@@ -67,7 +62,6 @@ export const resetpass = async (req, res) => {
         .json({ message: "Invalid or expired reset token" });
     }
 
-    // Update user's password
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
@@ -168,6 +162,7 @@ export const login = async (req, res) => {
       username: user.username,
       image: user.image,
       role: user.role,
+      varified: user.varified,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);
