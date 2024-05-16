@@ -72,7 +72,10 @@ const rideSchema = new mongoose.Schema(
     },
     selectedSeats:{
       type:[]
-    }
+    },
+    otp: {
+      type: Number,
+    },
     // createdAt, updatedAt => Member since <createdAt>
   },
   { timestamps: true }

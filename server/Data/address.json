@@ -96,5 +96,26 @@
         "latitude": 22.467065868283832,
         "longitude": 91.97355023278074,
         "distance": "350m"
+    },
+    {
+        "point_no": "15",
+        "location_name": "Central Field Road",
+        "latitude": 22.46596567729721,
+        "longitude": 91.97091860160138,
+        "distance": "350"
+    },
+    {
+        "point_no": "16",
+        "location_name": "CUET Bus Stand (Teacher’s Golchattar)",
+        "latitude": 22.468126269563623,
+        "longitude": 91.9710079132232,
+        "distance": "350"
+    },
+    {
+        "point_no": "17",
+        "location_name": "Teacher’s Dormitory Road",
+        "latitude": 22.466855829582407,
+        "longitude": 91.96852806034104,
+        "distance": "350"
     }
 ]

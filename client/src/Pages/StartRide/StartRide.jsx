@@ -303,6 +303,7 @@ const StartRide = () => {
                             }
                             <div className="w-1/2">
                                 <h1 className="text-5xl font-bold">{data.startLocationName} To {data.endLocationName}</h1>
+                                <h1 className="text-5xl font-bold mt-2">OTP: {data.otp}</h1>
                                 {
                                     data.type == 'share' ? <h1 className="text-5xl font-bold">Fare:{data.fare * data.selectedSeats.length}TK</h1> : <h1 className="text-5xl font-bold">Fare:{data.fare}tk</h1>
                                 }

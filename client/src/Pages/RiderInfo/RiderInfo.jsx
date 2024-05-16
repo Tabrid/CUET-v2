@@ -75,6 +75,7 @@ function RiderInfo() {
                                         <option value="route1">Route 1</option>
                                         <option value="route2">Route 2</option>
                                         <option value="route3">Route 3</option>
+                                        <option value="personal">Personal</option>
                                     </select>
                                     <button onClick={() => handleApprove(item._id)} className="bg-green-500 text-white py-1 px-4 rounded-md mr-2">Approve</button>
                                 </div>

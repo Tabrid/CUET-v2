@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import  { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useLogin from "../../Hooks/useLogin";
 import { FaEye } from "react-icons/fa";
@@ -19,11 +19,31 @@ const Login = () => {
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        fetch('/api/users/user')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setData(data)
+            })
+            .catch((error) => {
+                console.error('Error fetching user data:', error);
+            });
+
+    }, []);
 
     return (
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content flex-col lg:flex-row">
+                <div>
                 <img src="https://i.ibb.co/KjcLt1C/cais-high-resolution-logo-transparent-1.png" className="max-w-[15rem] lg:max-w-sm rounded-lg " />
+                <h1 className="text-center mt-4">Total User: {data.length}</h1>
+                </div>
                 <div className="flex justify-center items-center  ">
                     <div className="card w-full ">
                         <div className="card-body items-center text-center">

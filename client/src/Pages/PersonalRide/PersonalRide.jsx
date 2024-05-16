@@ -17,7 +17,16 @@ function PersonalRide() {
     })
   }, [])
 
+  const [otp, setOtp] = useState('');
 
+  useEffect(() => {
+    generateOTP();
+  }, []); // Empty dependency array ensures that this effect runs only once when the component mounts
+
+  const generateOTP = () => {
+    const randomOTP = Math.floor(1000 + Math.random() * 9000);
+    setOtp(randomOTP.toString());
+  };
   const [source, setSource] = useState('')
   const [sourceChange, setSourceChange] = useState(false)
   const [riderData, setRiderData] = useState(null);
@@ -25,7 +34,7 @@ function PersonalRide() {
   const [addressList, setAddressList] = useState([]);
   const [destination, setDistination] = useState('');
   const [rider, setRider] = useState(null);
-  const [fare , setFare ] = useState(null);
+  const [fare, setFare] = useState(null);
   const [sourceCoordinates, setSourceCoordinates] = useState({});
   const [destinationCoordinates, setDestinationCoordinates] = useState({});
   const [directionData, setDirectionData] = useState(null);
@@ -37,10 +46,10 @@ function PersonalRide() {
   }, [destination]);
 
   useEffect(() => {
-    fetch("/api/users/riders")
+    fetch("/api/users/rider/personal")
       .then((res) => res.json())
       .then((data) => {
-        setRiderData(data);
+        setRiderData(data.users);
       })
       .catch((error) => {
         console.error(error);
@@ -75,7 +84,7 @@ function PersonalRide() {
         // lng: result.features[0].geometry.coordinates[0],
         // lat: result.features[0].geometry.coordinates[1],
       });
-      
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -136,7 +145,7 @@ function PersonalRide() {
       console.log(result?.routes[0]?.geometry?.coordinates);
       setDirectionData(result);
       const distance = result?.routes[0]?.distance;
-      if (distance<700) {
+      if (distance < 700) {
         setFare(10)
       }
       else if (distance < 1000) {
@@ -145,7 +154,7 @@ function PersonalRide() {
       else if (distance < 1500) {
         setFare(30)
       }
-      else{
+      else {
         setFare(40)
       }
     } catch (error) {
@@ -157,7 +166,7 @@ function PersonalRide() {
     setRider(id);
   }
   const Payment = async () => {
-    
+
     const type = "personal";
     const order = {
       rider: rider,
@@ -165,10 +174,11 @@ function PersonalRide() {
       endLocationName: destination,
       startLocation: sourceCoordinates,
       endLocation: destinationCoordinates,
-      selectedSeats:[ '01', '02','03' ],
+      selectedSeats: ['01', '02', '03'],
       directionData: directionData.routes[0]?.geometry?.coordinates,
       type: type,
-      fare:fare
+      fare: fare,
+      otp: otp,
     }
 
     try {
@@ -256,7 +266,7 @@ function PersonalRide() {
               </Map> : null
             }
             {
-              fare ? <h1 className='text-3xl font-bold'>Fare:{fare} tk</h1>:null
+              fare ? <h1 className='text-3xl font-bold'>Fare:{fare} tk</h1> : null
             }
           </div>
           <div className='lg:w-1/2 w-full'>
@@ -312,31 +322,31 @@ function PersonalRide() {
 
               </div>
             </div>
-            
-            
+
+
             <div className=''>
               {
                 riderData?.length > 0 ? <div className='grid grid-cols-3 gap-10'>
-                {riderData?.map((item, index) => (
-                  <div
-                    key={index}
-                    onClick={() => {
-                      onRiderClick(item._id);
-                    }}
-                    className={`btn w-24 h-36 p-3 border-[1px] border-gray-200 my-2 rounded-md ${selectedItem === item._id ? 'bg-blue-500 hover:bg-blue-500 text-white' : ''
-                      }`}
-                  >
-                    <img src={item.image} className='w-20 h-20' />
-                    
-                  </div>
-                ))}
-              </div> : <div> no vehicale is available </div>
+                  {riderData?.map((item, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        onRiderClick(item._id);
+                      }}
+                      className={`btn w-24 h-36 p-3 border-[1px] border-gray-200 my-2 rounded-md ${selectedItem === item._id ? 'bg-blue-500 hover:bg-blue-500 text-white' : ''
+                        }`}
+                    >
+                      <img src={item.image} className='w-20 h-20' />
+
+                    </div>
+                  ))}
+                </div> : <div> no vehicale is available </div>
               }
 
-             
+
 
             </div>
-            <button className='btn w-full mt-5' onClick={Payment}>Confirm Now</button>
+            <button className='btn w-full mt-5  bg-green-300 hover:bg-green-300' onClick={Payment}>Confirm Now</button>
           </div>
         </div>
       </div>

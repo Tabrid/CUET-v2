@@ -19,7 +19,16 @@ function ShareRide() {
     })
   }, [])
 
+  const [otp, setOtp] = useState('');
 
+  useEffect(() => {
+    generateOTP();
+  }, []); // Empty dependency array ensures that this effect runs only once when the component mounts
+
+  const generateOTP = () => {
+    const randomOTP = Math.floor(1000 + Math.random() * 9000);
+    setOtp(randomOTP.toString());
+  };
   const [source, setSource] = useState('')
   const [sourceChange, setSourceChange] = useState(false)
   const [destinationChange, setDestinationChange] = useState(false)
@@ -198,7 +207,8 @@ function ShareRide() {
       directionData: directionData,
       type: type,
       selectedSeats:selectedSeats,
-      fare:fare
+      fare:fare,
+      otp: otp,
     }
       console.log(order);
     try {
