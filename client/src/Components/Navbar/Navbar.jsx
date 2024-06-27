@@ -11,7 +11,7 @@ const Navbar = () => {
                 <div className="navbar-start">
                     
                     <Link className="w-36 ">
-                        <img alt="Tailwind CSS Navbar component" src="https://i.ibb.co/0KFnPyD/cais-high-resolution-logo-black-transparent.png" />
+                        <img alt="Tailwind CSS Navbar component" src="https://i.ibb.co/2WDsMHw/image.png" />
                     </Link>
                 </div>
                 <div className="navbar-center hidden lg:flex">

@@ -41,7 +41,7 @@ const Login = () => {
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content flex-col lg:flex-row">
                 <div>
-                <img src="https://i.ibb.co/KjcLt1C/cais-high-resolution-logo-transparent-1.png" className="max-w-[15rem] lg:max-w-sm rounded-lg " />
+                <img src="https://i.ibb.co/2WDsMHw/image.png" className="max-w-[15rem] lg:max-w-sm rounded-lg " />
                 <h1 className="text-center mt-4">Total User: {data.length}</h1>
                 </div>
                 <div className="flex justify-center items-center  ">

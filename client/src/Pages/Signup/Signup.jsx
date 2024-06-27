@@ -60,7 +60,7 @@ const Signup = () => {
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content flex-col lg:flex-row gap-5">
                 <div className="w-1/2">
-                    <img src='https://i.ibb.co/KjcLt1C/cais-high-resolution-logo-transparent-1.png' className=" rounded-lg max-w-[15rem] lg:max-w-sm" />
+                    <img src='https://i.ibb.co/2WDsMHw/image.png' className=" rounded-lg max-w-[15rem] lg:max-w-sm" />
                 </div>
                 <div className="flex justify-center w-full lg:w-1/2">
                     <div className="card w-full ">
